@@ -1,0 +1,28 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile  # The Dockerfile for the Go application
+    container_name: rankedge
+    ports:
+      - "8080:8080"  # Expose the app on port 8080
+    depends_on:
+      - redis
+    networks:
+      - rankedge_network
+    volumes:
+      - .:/app
+      - /app/tmp
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - rankedge_network
+
+networks:
+  go-commerce_network:
+    driver: bridge
+
