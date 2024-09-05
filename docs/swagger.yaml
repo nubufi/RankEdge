@@ -1,0 +1,341 @@
+info:
+  contact: {}
+paths:
+  /auth/signin:
+    post:
+      consumes:
+      - application/json
+      description: Signs in the user, returns the user details and sets the jwt token
+      parameters:
+      - description: Login details
+        in: body
+        name: user
+        required: true
+        schema:
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              user:
+                properties:
+                  created_at:
+                    type: string
+                  email:
+                    type: string
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  role:
+                    type: string
+                  user_id:
+                    type: string
+                type: object
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      summary: Sign in
+      tags:
+      - Auth
+  /auth/signout:
+    get:
+      description: Signs out the user
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Sign out
+      tags:
+      - Auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: User details
+        in: body
+        name: user
+        required: true
+        schema:
+          properties:
+            email:
+              type: string
+            first_name:
+              type: string
+            last_name:
+              type: string
+            password:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            properties:
+              user:
+                properties:
+                  created_at:
+                    type: string
+                  email:
+                    type: string
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  role:
+                    type: string
+                  user_id:
+                    type: string
+                type: object
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+        "409":
+          description: Conflict
+          schema:
+            properties:
+              error:
+                type: string
+            type: object
+      summary: Create a new user
+      tags:
+      - Auth
+  /leaderboard:
+    get:
+      consumes:
+      - application/json
+      description: Get all leaderboards
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all leaderboards
+      tags:
+      - leaderboard
+  /leaderboard/{name}:
+    get:
+      consumes:
+      - application/json
+      description: Get a leaderboard
+      parameters:
+      - description: Leaderboard name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get a leaderboard
+      tags:
+      - leaderboard
+    post:
+      consumes:
+      - application/json
+      description: Update a leaderboard
+      parameters:
+      - description: Leaderboard name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update a leaderboard
+      tags:
+      - leaderboard
+    put:
+      consumes:
+      - application/json
+      description: Create a new leaderboard
+      parameters:
+      - description: Leaderboard name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create a new leaderboard
+      tags:
+      - leaderboard
+  /leaderboard/{name}/top/{n}:
+    get:
+      consumes:
+      - application/json
+      description: Get top N users
+      parameters:
+      - description: Leaderboard name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: Number of users
+        in: path
+        name: "n"
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get top N users
+      tags:
+      - leaderboard
+  /leaderboard/{name}/user/{userID}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove user
+      parameters:
+      - description: Leaderboard name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Remove user
+      tags:
+      - leaderboard
+    get:
+      consumes:
+      - application/json
+      description: Get user rank and score
+      parameters:
+      - description: Leaderboard name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get user rank and score
+      tags:
+      - leaderboard
+swagger: "2.0"

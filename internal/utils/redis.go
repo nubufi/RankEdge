@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"os"
 
+	"RankEdge/internal/models"
+
 	"github.com/redis/go-redis/v9"
 )
 
@@ -36,4 +38,27 @@ func SetCache(key string, value interface{}) {
 func ClearCache(key string) {
 	ctx := context.Background()
 	RedisClient.Del(ctx, key)
+}
+
+func ConvertRedisZToLeaderboardEntry(redisZ []redis.Z) []models.LeaderboardEntry {
+	var leaderboardEntries []models.LeaderboardEntry
+
+	for _, z := range redisZ {
+		// Assuming that Member is a string (user ID in your case)
+		userID, ok := z.Member.(string)
+		if !ok || userID == "" {
+			// Handle the case where Member is not a string, if needed
+			continue
+		}
+
+		// Create a new LeaderboardEntry from redis.Z
+		entry := models.LeaderboardEntry{
+			UserID: userID,
+			Score:  z.Score,
+		}
+
+		leaderboardEntries = append(leaderboardEntries, entry)
+	}
+
+	return leaderboardEntries
 }

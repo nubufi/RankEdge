@@ -7,12 +7,27 @@ services:
     ports:
       - "8080:8080"  # Expose the app on port 8080
     depends_on:
+      - mysql
       - redis
     networks:
       - rankedge_network
     volumes:
       - .:/app
       - /app/tmp
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: rankedge
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - rankedge_network
 
   redis:
     image: redis:alpine
@@ -22,7 +37,11 @@ services:
     networks:
       - rankedge_network
 
+volumes:
+  mysql_data:
+    driver: local
+
 networks:
-  go-commerce_network:
+  rankedge_network:
     driver: bridge
 
